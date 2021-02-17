@@ -18,13 +18,16 @@
  * Singly Linked List
  * 
  */
-class List {
+class SiList {
     // Node for singly linked list
     class Node {
         public:
             int data;
             Node *next;
     };
+
+    // Reference to head of list
+    Node* head = NULL;
 
     // creates a new node with data
     Node* createNode(int data) {
@@ -35,6 +38,7 @@ class List {
         return newNode;
     }
 
+    // add node to the end of a list
     void append(Node *node, int data) {
         Node *newNode = createNode(data);
         while(node != NULL) {
@@ -47,9 +51,6 @@ class List {
     }
 
     public:
-        // Reference to head of list
-        Node* head = NULL;
-
         /* create and add a node to list
          * O(n)
          */
@@ -90,6 +91,27 @@ class List {
             }
         }
 
+        // deletes node at the given index
+        void deleteNode(int index) {
+            int curIndex = 0;
+            Node *node = head;
+            Node *pNode = NULL;
+
+            if(index == 0) {
+                head = node->next;
+                return;
+            }
+
+            while(node != NULL) {
+                if(curIndex == index) {
+                    pNode->next = node->next;
+                }
+                pNode = node;
+                node = node->next;
+                curIndex++;
+            }
+        }
+
         /* returns length of list
          * O(n)
          */
@@ -103,6 +125,7 @@ class List {
             return len;
         }
 
+        // Get the data value of a node at a given index
         int get(int index) {
             int cur = 0;
             Node *node = head;
@@ -117,6 +140,7 @@ class List {
             return NULL;
         }
 
+        // get the index of the first occurrance of a given data value
         int getIndex(int data) {
             int index = 0;
             Node *node = head;
@@ -130,6 +154,7 @@ class List {
             std::cout << "Node does not exist.\n";
         }
 
+        // get the index of the given pointer to node
         int getIndex(Node *gNode) {
             int index = 0;
             Node *node = head;
@@ -147,13 +172,17 @@ class List {
          * O(n)
          */
         void printList() {
-            std::cout << "List: ";
+            std::cout << "List:\t";
             Node *node = head;
             while(node != NULL) {
-                std::cout << node->data << "\t";
+                if(node->next == NULL) {
+                    std::cout << node->data << "\n";
+                }
+                else {
+                    std::cout << node->data << " -> ";
+                }
                 node = node->next;
             }
-            std::cout << "\n";
         }
 };
 
@@ -163,7 +192,147 @@ class List {
  * 
  */
 
-// Implementation
+class DlList {
+    class Node {
+        public:
+            int data;
+            Node *prev;
+            Node *next;
+    };
+
+    Node *head = NULL;
+
+    Node* createNode(int data) {
+        Node *newNode = new Node();
+        newNode->data = data;
+        newNode->prev = NULL;
+        newNode->next = NULL;
+        return newNode;
+    }
+
+    void append(int data) {
+        Node *newNode = createNode(data);
+        Node *node = head;
+
+        while(node != NULL) {
+            if(node->next == NULL) {
+                node->next = newNode;
+                newNode->prev = node;
+                break;
+            }
+            node = node->next;
+        }
+    }
+
+    public:
+        // Add node
+        void add(int data) {
+            if(head == NULL) {
+                Node *newNode = createNode(data);
+                head = newNode;
+                newNode->prev = head;
+            }
+            else {
+                append(data);
+            }
+        }
+
+        // Push node
+        void push(int data) {
+            Node *newNode = createNode(data);
+            newNode->next = head;
+            head->prev = newNode;
+            head = newNode;
+        }
+
+        // Insert after given index
+        void insert(int index, int data) {
+            Node *node = head;
+            for(int cIndex = 0; node != NULL; cIndex++) {
+                if(cIndex == index) {
+                    Node *newNode = createNode(data);
+                    newNode->prev = node;
+                    node->next->prev = newNode;
+                    newNode->next = node->next;
+                    node->next = newNode;
+                }
+                node = node->next;
+            }
+        }
+
+        // Delete
+        void deleteNode(int index) {
+            Node *node = head;
+            for(int i = 0; node != NULL; i++) {
+                if(i == index) {
+                    node->prev->next = node->next;
+                    node->next->prev = node->prev;
+                    node->next == NULL;
+                    node->prev == NULL;
+                }
+                node = node->next;
+            }
+        }
+
+        // Length
+        int length() {
+            Node *node = head;
+            int len = 0;
+            while(node != NULL) {
+                len++;
+                node = node->next;
+            }
+            return len;
+        }
+
+        // Get
+        int get(int index) {
+            Node *node = head;
+            for(int i = 0; node != NULL; i++) {
+                if(i == index) {
+                    return node->data;
+                }
+                node = node->next;
+            }
+        }
+
+        int getIndex(int data) {
+            Node *node = head;
+            for(int i = 0; node != NULL; i++) {
+                if(node->data == data) {
+                    return i;
+                }
+                node = node->next;
+            }
+        }
+
+        int getIndex(Node *gNode) {
+            Node *node = head;
+            for(int i = 0; node != NULL; i++) {
+                if(node == gNode) {
+                    return i;
+                }
+                node = node->next;
+            }
+        }
+
+        // Print
+        void printList() {
+            Node *node = head;
+
+            std::cout << "List:\t";
+
+            while(node != NULL) {
+                if(node->next == NULL) {
+                    std::cout << node->data << "\n";
+                }
+                else {
+                    std::cout << node->data << " <-> ";
+                }
+                node = node->next;
+            }
+        }
+};
 
 
 /*
@@ -237,5 +406,13 @@ class List {
 
 // Implemetation
 
+
+/*
+ *
+ * Set
+ * 
+ */
+
+// Implementation
 
 #endif
